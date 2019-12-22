@@ -16,7 +16,7 @@
 <meta property="og:description" content="斐波那契数列斐波那契数列其数学定义为：F0&#x3D;1，F1&#x3D;1，Fn&#x3D;F(n-1)+F(n-2)（n&gt;&#x3D;2） 普通解法for循环12345678&lt;?php $arr[1] &#x3D; 1;for($i &#x3D; 2;$i &lt; 100;$i++)&amp;#123;    $arr[$i] &#x3D; $arr[$i-1] + $arr[$i-2];&amp;#125;echo join(&quot;,&quot;,$arr);&#x2F;&#x2F;将数组合并为">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2017-12-22T07:37:39.000Z">
-<meta property="article:modified_time" content="2019-12-22T08:35:06.926Z">
+<meta property="article:modified_time" content="2019-12-22T09:02:41.216Z">
 <meta property="article:author" content="franker zeng">
 <meta property="article:tag" content="php">
 <meta property="article:tag" content="斐波那契">
@@ -175,6 +175,8 @@
         <h2 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h2><p>斐波那契数列其数学定义为：F0=1，F1=1，Fn=F(n-1)+F(n-2)（n&gt;=2）</p>
 <h2 id="普通解法for循环"><a href="#普通解法for循环" class="headerlink" title="普通解法for循环"></a>普通解法for循环</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$arr[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span>($i = <span class="number">2</span>;$i &lt; <span class="number">100</span>;$i++)</span><br><span class="line">&#123;</span><br><span class="line">    $arr[$i] = $arr[$i<span class="number">-1</span>] + $arr[$i<span class="number">-2</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> join(<span class="string">","</span>,$arr);<span class="comment">//将数组合并为一个字符串输出</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
+<a id="more"></a>
+
 <h2 id="PHP-迭代器"><a href="#PHP-迭代器" class="headerlink" title="PHP 迭代器"></a>PHP 迭代器</h2><p>PHP 迭代器 继承Iterator 接口，实现5个方法即可<br>而生成器循环返回的是中间值</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fb</span> <span class="keyword">implements</span> <span class="title">Iterator</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($len)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;len = $len;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> $len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> $pre = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> $curr = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> $count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">current</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;curr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">next</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $tmp = <span class="keyword">$this</span>-&gt;curr;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;curr += <span class="keyword">$this</span>-&gt;pre;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;pre = $tmp;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;count++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">key</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"><span class="comment">//        return $this-&gt;key;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">valid</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;count &lt; <span class="keyword">$this</span>-&gt;len;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">rewind</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;pre = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;curr = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> ((<span class="keyword">new</span> Fb(<span class="number">40</span>)) <span class="keyword">as</span> $value) &#123;</span><br><span class="line">    <span class="keyword">echo</span> $value . <span class="string">"\n"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -291,8 +293,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2013/12/02/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">postName</div>
+    <a href="/2017/12/22/poison/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">100个瓶子里有1瓶毒药或2瓶毒药问题</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -417,18 +419,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tag1</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tag2</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tag3</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
@@ -442,6 +432,30 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">生成器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">毒药</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">老鼠</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">信息量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">tag1</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">tag2</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">tag3</a>
               </li>
             
             <div class="clearfix"></div>
