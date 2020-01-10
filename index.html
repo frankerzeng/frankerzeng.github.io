@@ -149,20 +149,20 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-redis-devops/redis-sentinel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-redis-devops/redis-cluster" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/02/redis-devops/redis-sentinel/">Redis Sentinel 哨兵</a>
+      <a class="article-title" href="/2019/12/24/redis-devops/redis-cluster/">Redis Cluster 集群</a>
     </h1>
   
 
         
-        <a href="/2020/01/02/redis-devops/redis-sentinel/" class="archive-article-date">
-  	<time datetime="2020-01-02T14:22:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-02</time>
+        <a href="/2019/12/24/redis-devops/redis-cluster/" class="archive-article-date">
+  	<time datetime="2019-12-24T13:45:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-24</time>
 </a>
         
       </header>
@@ -170,36 +170,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>《Redis开发与运维》——付磊 张益军编著</p>
-<h3 id="V2-8之前痛点"><a href="#V2-8之前痛点" class="headerlink" title="V2.8之前痛点"></a>V2.8之前痛点</h3><p>Redis主从复制模式下，主节点无法进行故障转移，需要手动操作从节点顶替主节点，同时还要更新客户端的主节点地址，会导致服务暂时不可用。</p>
-<p>Redis从2.8以后提供了Redis Sentinel（哨兵）结构来处理这个问题，2.6的哨兵有部分问题不建议使用。</p>
-<p>Reids Sentinel是Redis高可用的官方实现方案。</p>
-<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><table>
-<thead>
-<tr>
-<th align="left">概念</th>
-<th align="center">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">主节点</td>
-<td align="center">独立的redis进程，redis主数据库</td>
-</tr>
-<tr>
-<td align="left">从节点</td>
-<td align="center">独立的redis进程，redis主数据库</td>
-</tr>
-<tr>
-<td align="left">数据节点</td>
-<td align="center">主节点和从节点</td>
-</tr>
-<tr>
-<td align="left">Sentinel节点</td>
-<td align="center">监控redis数据节点的独立进程</td>
-</tr>
-</tbody></table>
-<h3 id="高可用方案实现原理"><a href="#高可用方案实现原理" class="headerlink" title="高可用方案实现原理"></a>高可用方案实现原理</h3><p>Redis Sentinel理论上应该部署在不同的物理机上以保证高可用，所以是一个分布式架构，包括n个Sentinel<br>节点和n个数据节点，每个Sentinel节点会对所有数据节点和Sentinel节点做状态监控，发现节点不可用时会标记主观下线，如果多数Sentinel节点都标记为主观下线的话，此节点会变成客观下线，此时会选举出一个Sentinel节点来处理下线操作，如果此节点是主节点还要进行故障转移，同时通知应用程序节点变化情况。整个过程自动完成，不需要人工介入所以很有效的解决了高可用的问题。</p>
-<p>架构图如下：<br><img src="/2020/01/02/redis-devops/redis-sentinel/sentinel-struct.jpeg" alt="架构图" title="架构图"></p>
-
+<p>未完待续</p>
+        
+          <a class="article-more-a" href="/2019/12/24/redis-devops/redis-cluster/#more">查看全文 >></a>
+        
       
 
       
@@ -263,38 +237,31 @@
 
 
   
-    <article id="post-swoole-rpc/swoole-rpc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-redis-devops/redis-sentinel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/20/swoole-rpc/swoole-rpc/">swool实现简单rpc</a>
+      <a class="article-title" href="/2019/12/22/redis-devops/redis-sentinel/">Redis Sentinel 哨兵</a>
     </h1>
   
 
         
-        <a href="/2019/12/20/swoole-rpc/swoole-rpc/" class="archive-article-date">
-  	<time datetime="2019-12-20T02:31:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-20</time>
+        <a href="/2019/12/22/redis-devops/redis-sentinel/" class="archive-article-date">
+  	<time datetime="2019-12-22T14:22:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="什么是RPC"></a>什么是RPC</h2><p>RPC，是一种远程调用方式（Remote Procedure Call），通过 RPC 我们可以像调用本地方法一样调用别的机器上的方法，用户将无感服务器与服务器之间<br>的通讯。RPC 在微服务当中起到相当大的作用，当然 RPC 不是微服务必须的一种方式，有别的方式也可以实现这种远程调用例如 RESTful API 就可以实现<br>远程调用。如果有用过 SOAP 那么你使用 RPC 将会觉得很类似，都是可以直接调用别的机器上的方法。RPC 协议可基于 TCP、UDP 或者 HTTP 实现。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.bilibili.com/video/av79012272?p=5" target="_blank" rel="noopener">https://www.bilibili.com/video/av79012272?p=5</a><br><a href="https://www.swoole.com/" target="_blank" rel="noopener">https://www.swoole.com/</a></p>
-<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><ol>
-<li>php拓展</li>
-</ol>
-<p>Swoole-4.x需要 PHP-7.0.0 或更高版本</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Dockerfile</span></span><br><span class="line"><span class="keyword">FROM</span> php:<span class="number">7.1</span>.<span class="number">0</span>-fpm</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pecl install swoole</span></span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>phpstorm安装插件，不然没有代码提示，容易打错字<br><img src="/2019/12/20/swoole-rpc/swoole-rpc/plug.png" alt="我的图片" title="插件"></li>
-</ol>
-<h3 id="热更新"><a href="#热更新" class="headerlink" title="热更新"></a>热更新</h3><p>服务端是以守护进程的方式运行的，启动的时候php代码一起常驻内存会出现新代码不能及时运行的问题，暴力<br>方法是重启守护进程，但是在生产环境是不可能的，重启期间会导致服务不可用。所以swool有提供热更新的方式。<br>类似nginx reload，可以平滑加载新配置。做到最好的用户体验。</p>
-
+        <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>《Redis开发与运维》——付磊 张益军编著</p>
+<h3 id="V2-8之前痛点"><a href="#V2-8之前痛点" class="headerlink" title="V2.8之前痛点"></a>V2.8之前痛点</h3><p>Redis主从复制模式下，主节点无法进行故障转移，需要手动操作从节点顶替主节点，同时还要更新客户端的主节点地址，会导致服务暂时不可用。<br>Redis从2.8以后提供了Redis Sentinel（哨兵）结构来处理这个问题，2.6的哨兵有部分问题不建议使用。<br>Reids Sentinel是Redis高可用的官方实现方案。</p>
+        
+          <a class="article-more-a" href="/2019/12/22/redis-devops/redis-sentinel/#more">查看全文 >></a>
+        
       
 
       
@@ -307,11 +274,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">php</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">框架</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
         		</li>
       		
 		</ul>
@@ -323,15 +286,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/swool//" class="article-tag-list-link color1">swool</a>
+        			<a href="/categories/redis//" class="article-tag-list-link color1">redis</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="/categories/swool/php//" class="article-tag-list-link color4">php</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/swool/php/rpc//" class="article-tag-list-link color4">rpc</a>
+        			<a href="/categories/redis/devops//" class="article-tag-list-link color2">devops</a>
         		</li>
       		
 		</ul>
@@ -373,13 +332,13 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/23/boshining/">医学通识讲义-薄世宁</a>
+      <a class="article-title" href="/2019/11/25/boshining/">医学通识讲义-薄世宁</a>
     </h1>
   
 
         
-        <a href="/2019/10/23/boshining/" class="archive-article-date">
-  	<time datetime="2019-10-23T14:04:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-23</time>
+        <a href="/2019/11/25/boshining/" class="archive-article-date">
+  	<time datetime="2019-11-25T14:04:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-25</time>
 </a>
         
       </header>
@@ -388,7 +347,7 @@
       
         <h3 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h3><p>喜马拉雅听到此书的解读，甚是有趣，颠覆了很多我对医学、生物体的认知，所以买来细读一遍。程序员在忙着赚钱的同时别忘了照看好自己的身体，而这本书<br>让读者对医学、生物体有个更加正确的认识。正如本书的副标题——做自己和家人的守护者，一生需要上一次医学院。我会挑几个有意思的点分享下。</p>
 <h3 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h3><p>薄世宁：北京大学第三医院ICU医师，得到APP课程主讲人</p>
-
+<h3 id><a href="#" class="headerlink" title></a></h3>
       
 
       
@@ -426,6 +385,102 @@
       		 
         		<li class="article-tag-list-item">
         			<a href="/categories/医学/文学//" class="article-tag-list-link color3">文学</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-swoole-rpc/swoole-rpc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/02/swoole-rpc/swoole-rpc/">swool实现简单rpc</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/02/swoole-rpc/swoole-rpc/" class="archive-article-date">
+  	<time datetime="2019-09-02T02:31:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="什么是RPC"></a>什么是RPC</h2><p>RPC，是一种远程调用方式（Remote Procedure Call），通过 RPC 我们可以像调用本地方法一样调用别的机器上的方法，用户将无感服务器与服务器之间<br>的通讯。RPC 在微服务当中起到相当大的作用，当然 RPC 不是微服务必须的一种方式，有别的方式也可以实现这种远程调用例如 RESTful API 就可以实现<br>远程调用。如果有用过 SOAP 那么你使用 RPC 将会觉得很类似，都是可以直接调用别的机器上的方法。RPC 协议可基于 TCP、UDP 或者 HTTP 实现。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.bilibili.com/video/av79012272?p=5" target="_blank" rel="noopener">https://www.bilibili.com/video/av79012272?p=5</a><br><a href="https://www.swoole.com/" target="_blank" rel="noopener">https://www.swoole.com/</a></p>
+        
+          <a class="article-more-a" href="/2019/09/02/swoole-rpc/swoole-rpc/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">php</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">框架</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/swool//" class="article-tag-list-link color1">swool</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/swool/php//" class="article-tag-list-link color4">php</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/swool/php/rpc//" class="article-tag-list-link color4">rpc</a>
         		</li>
       		
 		</ul>
@@ -652,98 +707,6 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/26/hello-world/">postName</a>
-    </h1>
-  
-
-        
-        <a href="/2016/09/26/hello-world/" class="archive-article-date">
-  	<time datetime="2016-09-26T07:30:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>以下是正文</p>
-<p>查看更多</p>
-        
-          <a class="article-more-a" href="/2016/09/26/hello-world/#more">查看全文 >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tag1</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tag2</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tag3</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/默认分类//" class="article-tag-list-link color5">默认分类</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -860,7 +823,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">框架</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -873,26 +844,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">生成器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tag1</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tag2</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tag3</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">框架</a>
               </li>
             
             <div class="clearfix"></div>
