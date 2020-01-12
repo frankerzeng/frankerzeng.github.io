@@ -237,6 +237,117 @@
 
 
   
+    <article id="post-redis-devops/redis-lua" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/22/redis-devops/redis-lua/">Redis 事物与lua</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/22/redis-devops/redis-lua/" class="archive-article-date">
+  	<time datetime="2019-12-22T14:22:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>《Redis开发与运维》——付磊 张益军编著</p>
+<h3 id="Redis事物"><a href="#Redis事物" class="headerlink" title="Redis事物"></a>Redis事物</h3><p>Redis一组操作，要么全部执行要么全部不执行，保证多个语句具有原子性。</p>
+<p>语法为：</p>
+<ol>
+<li>开始事物：multi</li>
+<li>事物包含命令：set xxx</li>
+<li>执行事物或者停止事物：exec | discard</li>
+</ol>
+<p>Redis事物还支持乐观锁，事物中对某个值执行：watch key，只要这个值在其他会话中发生变化则exec结果为空，即事物执行失败。</p>
+<h3 id="Lua脚本"><a href="#Lua脚本" class="headerlink" title="Lua脚本"></a>Lua脚本</h3><p>Lua是一种服务器脚本语言，简单却功能强大，在Nginx也可以使用Lua拓展编写业务逻辑来快速响应web请求。由于Redis是单线程架构，执行Lua脚本的时候也是排队执行的，所以可以保证事务性。复杂的脚本，如用户数据初始化，如果用原始命令要穿每个字段，同时很多字段是默认值，如果用Lua脚本来初始化数据的话减少了网络传输的数据量，因为脚本可以保存在节点上，不需要每次都传输全部数据或脚本。</p>
+<h4 id="Lua脚本的使用方法"><a href="#Lua脚本的使用方法" class="headerlink" title="Lua脚本的使用方法"></a>Lua脚本的使用方法</h4><ul>
+<li>eval 脚本内容 key个数 key列表 参数列表。如：eval ‘return “hello ” .. KEYS[1] .. ARGV[1]’ 1 redis world /n 输出 hello redisworld</li>
+<li>evalsha 脚本SHA1值 key个数 key列表 参数列表</li>
+</ul>
+<h4 id="Redis管理Lua脚本"><a href="#Redis管理Lua脚本" class="headerlink" title="Redis管理Lua脚本"></a>Redis管理Lua脚本</h4><ul>
+<li>脚本加载到Redis节点，redis-cli script load “$(cat lua_xxx.lua)”，返回脚本的SHA1值</li>
+<li>删除全部脚本，redis-cli script flush</li>
+<li>杀死当前脚本，有可能某些脚本执行时间太长，导致其他命令阻塞，redis-cli script kill</li>
+</ul>
+<h2 id="todo-redis事物和lua事物支持程度，是否真事物"><a href="#todo-redis事物和lua事物支持程度，是否真事物" class="headerlink" title="todo redis事物和lua事物支持程度，是否真事物"></a>todo redis事物和lua事物支持程度，是否真事物</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Lua</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">事物</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Redis//" class="article-tag-list-link color1">Redis</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Redis/devops//" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-redis-devops/redis-sentinel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -823,15 +934,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">框架</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -844,6 +947,26 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">生成器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Lua</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">事物</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">框架</a>
               </li>
             
             <div class="clearfix"></div>
