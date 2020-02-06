@@ -6,22 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://frankerzeng.com">
-  <title>Redis Sentinel 哨兵 | frankerzeng&#39;s bolg</title>
+  <title>Teemo Attacking | frankerzeng&#39;s bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="redis高可用，哨兵,sentinel">
+  <meta name="description" content="算法,leetcode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis Sentinel 哨兵">
-<meta property="og:url" content="https://frankerzeng.com/2019/12/22/redis-devops/redis-sentinel/index.html">
+<meta property="og:title" content="Teemo Attacking">
+<meta property="og:url" content="https://frankerzeng.com/2020/01/19/leetcode/495-Teemo-Attacking/index.html">
 <meta property="og:site_name" content="frankerzeng&#39;s bolg">
-<meta property="og:description" content="redis高可用，哨兵,sentinel">
+<meta property="og:description" content="算法,leetcode">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://frankerzeng.com/2019/12/22/redis-devops/redis-sentinel/sentinel-struct.jpeg">
-<meta property="article:published_time" content="2019-12-22T14:22:10.000Z">
-<meta property="article:modified_time" content="2020-01-10T13:44:55.653Z">
+<meta property="article:published_time" content="2020-01-19T04:09:01.000Z">
+<meta property="article:modified_time" content="2020-02-06T12:35:44.656Z">
 <meta property="article:author" content="franker zeng">
-<meta property="article:tag" content="redis">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="leetcode">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://frankerzeng.com/2019/12/22/redis-devops/redis-sentinel/sentinel-struct.jpeg">
   
     <link rel="alternative" href="/atom.xml" title="frankerzeng&#39;s bolg" type="application/atom+xml">
   
@@ -151,89 +150,40 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-redis-devops/redis-sentinel" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-leetcode/495-Teemo-Attacking" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Redis Sentinel 哨兵
+      Teemo Attacking
     </h1>
   
 
         
-        <a href="/2019/12/22/redis-devops/redis-sentinel/" class="archive-article-date">
-  	<time datetime="2019-12-22T14:22:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-22</time>
+        <a href="/2020/01/19/leetcode/495-Teemo-Attacking/" class="archive-article-date">
+  	<time datetime="2020-01-19T04:09:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-19</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>《Redis开发与运维》——付磊 张益军编著</p>
-<h3 id="V2-8之前痛点"><a href="#V2-8之前痛点" class="headerlink" title="V2.8之前痛点"></a>V2.8之前痛点</h3><p>Redis主从复制模式下，主节点无法进行故障转移，需要手动操作从节点顶替主节点，同时还要更新客户端的主节点地址，会导致服务暂时不可用。<br>Redis从2.8以后提供了Redis Sentinel（哨兵）结构来处理这个问题，2.6的哨兵有部分问题不建议使用。<br>Reids Sentinel是Redis高可用的官方实现方案。</p>
+        <h3 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h3><p><a href="https://leetcode.com/problems/teemo-attacking/" target="_blank" rel="noopener">https://leetcode.com/problems/teemo-attacking/</a></p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>In LOL world, there is a hero called Teemo and his attacking can make his enemy Ashe be in poisoned condition. Now, given the Teemo’s attacking ascending time series towards Ashe and the poisoning time duration per Teemo’s attacking, you need to output the total time that Ashe is in poisoned condition.</p>
+<p>You may assume that Teemo attacks at the very beginning of a specific time point, and makes Ashe be in poisoned condition immediately.</p>
 <a id="more"></a>
 
-<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><table>
-<thead>
-<tr>
-<th align="left">概念</th>
-<th align="center">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">主节点</td>
-<td align="center">独立的redis进程，redis主数据库</td>
-</tr>
-<tr>
-<td align="left">从节点</td>
-<td align="center">独立的redis进程，redis从数据库</td>
-</tr>
-<tr>
-<td align="left">数据节点</td>
-<td align="center">主节点和从节点</td>
-</tr>
-<tr>
-<td align="left">Sentinel节点</td>
-<td align="center">监控redis数据节点的独立进程</td>
-</tr>
-</tbody></table>
-<h3 id="高可用方案实现原理"><a href="#高可用方案实现原理" class="headerlink" title="高可用方案实现原理"></a>高可用方案实现原理</h3><p>Redis Sentinel理论上应该部署在不同的物理机上以保证高可用，所以是一个分布式架构，包括n个Sentinel<br>节点和n个数据节点，每个Sentinel节点会对所有数据节点和Sentinel节点做状态监控，发现节点不可用时会标记主观下线，如果多数Sentinel节点都标记为主观下线的话，此节点会变成客观下线，此时会选举出一个Sentinel节点（领导者节点，通过Raft算法选举）来处理下线操作，如果此节点是主节点还要进行故障转移，同时通知应用程序节点变化情况。整个过程自动完成，不需要人工介入所以很有效的解决了高可用的问题。</p>
-<p>拓扑图如下：<br><img src="/2019/12/22/redis-devops/redis-sentinel/sentinel-struct.jpeg" alt="架构图" title="架构图"></p>
-<h3 id="服务安装"><a href="#服务安装" class="headerlink" title="服务安装"></a>服务安装</h3><ul>
-<li>启动数据节点，同主从复制</li>
-<li>配置Sentinel节点<ul>
-<li>启动Sentinel服务，redis-sentinel redis-sentinel-portxxx.conf</li>
-<li>redis-sentinel-portxxx.conf的关键配资是：</li>
-<li>sentinel monitor masternode 127.0.0.1 6379 2<ul>
-<li>masternode：主节点名称，可以同时监控多个redis主节点</li>
-<li>2：判断主节点下线至少需要几个sentinel节点同意</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Example 1:</span><br><span class="line"></span><br><span class="line">Input: [1,4], 2</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: At time point 1, Teemo starts attacking Ashe and makes Ashe be poisoned immediately. </span><br><span class="line">This poisoned status will last 2 seconds until the end of time point 2. </span><br><span class="line">And at time point 4, Teemo attacks Ashe again, and causes Ashe to be in poisoned status for another 2 seconds. </span><br><span class="line">So you finally need to output 4.</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Example 2:</span><br><span class="line"></span><br><span class="line">Input: [1,2], 2</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: At time point 1, Teemo starts attacking Ashe and makes Ashe be poisoned. </span><br><span class="line">This poisoned status will last 2 seconds until the end of time point 2. </span><br><span class="line">However, at the beginning of time point 2, Teemo attacks Ashe again who is already in poisoned status. </span><br><span class="line">Since the poisoned status won&#39;t add up together, though the second poisoning attack will still work at time point 2, it will stop at the end of time point 3. </span><br><span class="line">So you finally need to output 3.</span><br></pre></td></tr></table></figure>
+<p>Note:</p>
+<ul>
+<li>You may assume the length of given time series array won’t exceed 10000.</li>
+<li>You may assume the numbers in the Teemo’s attacking time series and his poisoning time duration per attacking are non-negative integers, which won’t exceed 10,000,000.</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="故障转移"><a href="#故障转移" class="headerlink" title="故障转移"></a>故障转移</h3><p>通过Raft算法选举出一个sentinel领导节点负责故障转移任务</p>
-<ol>
-<li>在从节点中选出一个节点作为新的主节点，选举顺序如下<ol>
-<li>过滤下线节点，5秒内没有回复sentinel节点ping响应的节点</li>
-<li>是否设置了从节点优先级</li>
-<li>选择复制偏移量最大的节点，这种节点数据完整性最高</li>
-<li>选择runid最小的节点</li>
-</ol>
-</li>
-<li>sentinel领导节点对选出来的从节点执行命令使其成为新主节点</li>
-<li>使剩余的从节点变为新主节点的从节点</li>
-<li>关注故障的节点，恢复后变成新节点的从节点</li>
-</ol>
-<h3 id="客户端连接"><a href="#客户端连接" class="headerlink" title="客户端连接"></a>客户端连接</h3><p>sentinel高可用的方案可以让客户端不用手动修改配置，主动感知到redis数据节点的状态。连接redis sentinel只需要知道sentinel节点部分集合和主数据节点名称，基本做法如下：</p>
-<ol>
-<li>遍历sentinel节点获取一个可用的sentinel节点即可，所有sentinel节点共享数据的。</li>
-<li>通过get-master-addr-by-name获取主节点信息。</li>
-<li>利用redis的发布订阅功能订master的阅故障转移。</li>
-<li>读写操作。</li>
-</ol>
+<h4 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">findPoisonedDuration</span><span class="params">(timeSeries []<span class="keyword">int</span>, duration <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	rst := <span class="number">0</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(timeSeries) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> rst</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	poisonedMax := timeSeries[<span class="number">0</span>] <span class="comment">// 设置最新中毒坐标</span></span><br><span class="line">	<span class="keyword">for</span> k, v := <span class="keyword">range</span> timeSeries &#123;</span><br><span class="line">		<span class="keyword">if</span> poisonedMax &gt; v &#123;</span><br><span class="line">			rst += v - timeSeries[k<span class="number">-1</span>] <span class="comment">// 累加的长度是前两个元素的间隔</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			rst += duration</span><br><span class="line">		&#125;</span><br><span class="line">		poisonedMax = v + duration</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> rst</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 
       
 
@@ -247,7 +197,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
         		</li>
       		
 		</ul>
@@ -259,11 +213,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/redis//" class="article-tag-list-link color1">redis</a>
+        			<a href="/categories/算法//" class="article-tag-list-link color3">算法</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="/categories/redis/devops//" class="article-tag-list-link color2">devops</a>
+        			<a href="/categories/算法/leetcode//" class="article-tag-list-link color4">leetcode</a>
         		</li>
       		
 		</ul>
@@ -318,7 +272,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://frankerzeng.com/2019/12/22/redis-devops/redis-sentinel/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://frankerzeng.com/2020/01/19/leetcode/495-Teemo-Attacking/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -332,18 +286,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/12/24/redis-devops/redis-cluster/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Redis Cluster 集群
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/11/25/boshining/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">医学通识讲义-薄世宁</div>
+    <a href="/2020/01/19/leetcode/794-Valid-Tic-Tac-Toe-State/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Valid Tic-Tac-Toe State</div>
       <i class="icon-circle-right"></i>
     </a>
   
